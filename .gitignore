@@ -1,0 +1,10 @@
+dist
+AUTHORS
+ChangeLog
+*~
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.tox/
+.eggs/
