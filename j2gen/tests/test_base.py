@@ -20,6 +20,7 @@ from unittest import mock
 
 from ddt import ddt, data, unpack
 
+import jinja2
 import j2gen
 
 
@@ -92,6 +93,23 @@ class TestBasics(unittest.TestCase):
                 # close to delete tempfiles
                 for i in inputs:
                     i.close()
+
+    def test__do_process_generate_undefined_variable(self):
+        with tempfile.NamedTemporaryFile(mode='w') as tpl, \
+             tempfile.NamedTemporaryFile(mode='w') as input1:
+            # write template example
+            tpl.write('{{ unkown }}')
+            tpl.seek(0)
+            # write input
+            input1.write("""---
+            well_known: 1""")
+            input1.seek(0)
+            # do the work
+            ns = argparse.Namespace(output='-',
+                                    input=[input1.name],
+                                    template=tpl.name)
+            with self.assertRaises(jinja2.exceptions.UndefinedError):
+                j2gen._do_process_generate(ns)
 
 
 if __name__ == '__main__':
