@@ -51,7 +51,9 @@ def _process_generate_check_args(args):
 def _do_process_generate(args):
     # open the template
     with open(args.template, 'r') as tpl:
-        template = jinja2.Template(tpl.read())
+        template = jinja2.Template(
+            tpl.read(),
+            undefined=jinja2.StrictUndefined)
 
     # open the input file(s)
     input_data = None
